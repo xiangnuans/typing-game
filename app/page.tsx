@@ -52,18 +52,18 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
-      <h1 className="text-4xl font-extrabold text-white mb-8 animate-fade-in-down">
+    <div className="min-h-screen bg-bg text-text flex flex-col items-center py-12 px-4 sm:px-6 lg:px-8">
+      <h1 className="text-4xl font-extrabold mb-8 animate-fade-in-down">
         Typing Game Tool
       </h1>
-      <div className="bg-white p-4 rounded-lg shadow-lg max-w-md w-full mb-4">
+      <div className="bg-card-bg p-4 rounded-lg shadow-lg max-w-md w-full mb-4 border border-border-color">
         {isEditingProfile ? (
           <ProfileEdit profile={profile} onSave={handleSave} />
         ) : (
           <ProfileDisplay profile={profile} onEdit={handleEdit} />
         )}
       </div>
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full animate-fade">
+      <div className="bg-card-bg p-8 rounded-lg shadow-lg max-w-2xl w-full animate-fade border border-border-color">
         <TypingGame profile={profile} onRefresh={onRefresh} />
       </div>
     </div>

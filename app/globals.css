@@ -1,8 +1,33 @@
 /* styles/globals.css */
 
+:root {
+  --bg-color: #ffffff;
+  --text-color: #111827;
+  --card-bg: #f9fafb;
+  --border-color: #e5e7eb;
+  --button-bg: #3b82f6;
+  --button-text: #ffffff;
+  --button-hover: #2563eb;
+}
+
+.dark {
+  --bg-color: #111827;
+  --text-color: #ffffff;
+  --card-bg: #1f2937;
+  --border-color: #374151;
+  --button-bg: #3b82f6;
+  --button-text: #ffffff;
+  --button-hover: #2563eb;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 平滑过渡动画 */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
 
 .container {
   max-width: 100%;
