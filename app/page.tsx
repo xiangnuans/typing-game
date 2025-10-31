@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import Loading from "@/components/Loading";
 import { Profile } from "@/types/profile";
@@ -22,14 +22,19 @@ const HomePage: React.FC = () => {
   const [profile, setProfile] = useState<Profile>(DefaultProfile);
   const [isLoading, setIsLoading] = useState(true);
   const [isEditingProfile, setIsEditingProfile] = useState(false);
-  const fetchProfile = async () => {
-    const response = await axios.get("/api/profile");
-    setProfile(response.data);
-    setIsLoading(false);
-  };
+  const fetchProfile = useCallback(async () => {
+    try {
+      const response = await axios.get("/api/profile");
+      setProfile(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Failed to fetch profile:", error);
+      setIsLoading(false);
+    }
+  }, []);
   useEffect(() => {
     fetchProfile();
-  }, []);
+  }, [fetchProfile]);
 
   const handleEdit = () => {
     setIsEditingProfile(true);
@@ -37,10 +42,15 @@ const HomePage: React.FC = () => {
 
   const handleSave = async (updatedProfile: Profile) => {
     setIsLoading(true);
-    await axios.post("/api/profile", updatedProfile);
-    setProfile(updatedProfile);
-    setIsEditingProfile(false);
-    setIsLoading(false);
+    try {
+      await axios.post("/api/profile", updatedProfile);
+      setProfile(updatedProfile);
+      setIsEditingProfile(false);
+    } catch (error) {
+      console.error("Failed to save profile:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const onRefresh = () => {
