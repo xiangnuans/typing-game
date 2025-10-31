@@ -110,7 +110,7 @@ const TypingGame: React.FC<TypingGameProps> = ({ profile, onRefresh }) => {
             </div>
           )}
           <button
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer"
+            className="mt-4 px-4 py-2 bg-primary text-white rounded-lg cursor-pointer hover:bg-secondary transition-colors duration-300"
             onClick={startNewGame}
           >
             Play Again
@@ -121,16 +121,16 @@ const TypingGame: React.FC<TypingGameProps> = ({ profile, onRefresh }) => {
           <div className="text-2xl font-bold mb-4">
             Type the following word:
           </div>
-          <div className="text-4xl font-extrabold mb-8 animate-bounce text-indigo-600">
+          <div className="text-4xl font-extrabold mb-8 animate-bounce text-primary">
             {targetText}
           </div>
           <input
             type="text"
             value={inputText}
             onChange={handleInputChange}
-            className={`p-2 border-2 rounded-lg text-lg mb-2 focus:outline-none transition-all duration-300 ${
+            className={`p-2 border-2 rounded-lg text-lg mb-2 focus:outline-none transition-all duration-300 bg-card-bg text-text ${
               isCorrect === null
-                ? "border-indigo-600"
+                ? "border-border-color"
                 : isCorrect
                 ? "border-green-600 bg-green-50"
                 : "border-red-600 bg-red-50"

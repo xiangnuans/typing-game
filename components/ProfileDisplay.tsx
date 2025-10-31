@@ -37,7 +37,7 @@ const ProfileDisplay: React.FC<ProfileDisplayProps> = ({ profile, onEdit }) => {
       </div>
       <button
         onClick={onEdit}
-        className="flex items-center mt-2 px-2 py-1 bg-indigo-600 text-white rounded-lg hover:bg-purple-600 transition-colors duration-300"
+        className="flex items-center mt-2 px-2 py-1 bg-primary text-white rounded-lg hover:bg-secondary transition-colors duration-300"
       >
         <PencilSquareIcon className="w-4 h-4 mr-1" />
         Edit
