@@ -55,7 +55,7 @@ const ProfileEdit: React.FC<ProfileEditProps> = ({ profile, onSave }) => {
           required
         />
       </div>
-      {/* <div className="flex flex-col">
+      <div className="flex flex-col">
         <label className="text-sm font-semibold mb-1">Avatar URL</label>
         <input
           type="url"
@@ -64,7 +64,7 @@ const ProfileEdit: React.FC<ProfileEditProps> = ({ profile, onSave }) => {
           onChange={handleChange}
           className="p-2 border rounded-md"
         />
-      </div> */}
+      </div>
       <button
         type="submit"
         className="mt-2 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-purple-600 transition-colors duration-300"
