@@ -157,7 +157,7 @@ const Navbar: React.FC = () => {
   
   // 点击外部关闭菜单
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent | TouchEvent) => {
+    const handleClickOutside = (event: Event) => {
       if (navbarRef.current && !navbarRef.current.contains(event.target as Node)) {
         closeAllDropdowns();
         if (window.innerWidth <= 768) {
@@ -176,7 +176,10 @@ const Navbar: React.FC = () => {
   
   // 键盘导航处理
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
+    const handleKeyDown = (event: Event) => {
+      // 确保是KeyboardEvent
+      if (!(event instanceof KeyboardEvent)) return;
+      
       // 关闭移动端菜单
       if (event.key === 'Escape') {
         closeAllDropdowns();
