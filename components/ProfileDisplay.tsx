@@ -1,6 +1,7 @@
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { Profile } from "../types/profile";
 import React from "react";
+import LazyImage from "./LazyImage";
 
 interface ProfileDisplayProps {
   profile: Profile;
@@ -9,13 +10,13 @@ interface ProfileDisplayProps {
 
 const ProfileDisplay: React.FC<ProfileDisplayProps> = ({ profile, onEdit }) => {
   const defaultAvatarUrl = "/default-avatar.avif";
-  // const avatarUrl = profile.avatarUrl || defaultAvatarUrl;
+  const avatarUrl = profile.avatarUrl || defaultAvatarUrl;
 
   return (
     <div className="flex flex-col items-center">
       <div className="relative rounded-full overflow-hidden w-16 h-16 mb-2">
-        <img
-          src={defaultAvatarUrl}
+        <LazyImage
+          dataSrc={avatarUrl}
           alt="Profile Avatar"
           className="object-cover w-full h-full"
         />

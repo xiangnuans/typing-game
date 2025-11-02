@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import Confetti from "react-confetti";
 import { Profile } from "@/types/profile";
@@ -38,15 +38,15 @@ const TypingGame: React.FC<TypingGameProps> = ({ profile, onRefresh }) => {
 
   useEffect(() => {
     startNewGame();
-  }, []);
+  }, [startNewGame]);
 
   useEffect(() => {
     if (timeLeft === 0) {
       endGame();
     }
-  }, [timeLeft]);
+  }, [timeLeft, endGame, score, profile]);
 
-  const startNewGame = () => {
+  const startNewGame = useCallback(() => {
     onRefresh();
     setTargetText(generateTargetText());
     setScore(0);
@@ -63,19 +63,19 @@ const TypingGame: React.FC<TypingGameProps> = ({ profile, onRefresh }) => {
         return prev - 1;
       });
     }, 1000);
-  };
+  }, [onRefresh, generateTargetText, endGame]);
 
-  const endGame = async () => {
+  const endGame = useCallback(async () => {
     setGameOver(true);
     if (score > profile.highscore) {
       const updatedProfile = { ...profile, highscore: score };
       await axios.post("/api/profile", updatedProfile);
     }
-  };
+  }, [score, profile]);
 
-  const generateTargetText = () => {
+  const generateTargetText = useCallback(() => {
     return words[Math.floor(Math.random() * words.length)];
-  };
+  }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -98,7 +98,7 @@ const TypingGame: React.FC<TypingGameProps> = ({ profile, onRefresh }) => {
       {gameOver ? (
         <div>
           <div className="text-2xl font-bold mb-4">
-            Time's up! Your score: {score}
+            Time&apos;s up! Your score: {score}
           </div>
           {score > profile.highscore ? (
             <div className="text-xl text-green-600">
