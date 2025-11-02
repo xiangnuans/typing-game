@@ -14,6 +14,11 @@ interface LazyImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   preloadDistance?: number;
   showProgress?: boolean;
   priority?: boolean;
+  pictureSources?: Array<{
+    srcSet: string;
+    media?: string;
+    type?: string;
+  }>;
 }
 
 // LazyImage组件引用类型
@@ -34,6 +39,7 @@ const LazyImage = forwardRef<LazyImageRef, LazyImageProps>((
     priority = false,
     alt,
     className,
+    pictureSources = [],
     ...rest
   },
   ref
@@ -63,12 +69,46 @@ const LazyImage = forwardRef<LazyImageRef, LazyImageProps>((
     if (priority && dataSrc) {
       // 优先加载图片
       const img = new Image();
-      img.src = dataSrc;
-      if (dataSrcSet) {
-        img.srcset = dataSrcSet;
+      
+      // 处理picture元素中的source元素
+      if (pictureSources.length > 0) {
+        const picture = document.createElement('picture');
+        
+        // 添加所有source元素
+        pictureSources.forEach((source) => {
+          const sourceElement = document.createElement('source');
+          sourceElement.srcset = source.srcSet;
+          if (source.media) {
+            sourceElement.media = source.media;
+          }
+          if (source.type) {
+            sourceElement.type = source.type;
+          }
+          picture.appendChild(sourceElement);
+        });
+        
+        // 添加img元素
+        picture.appendChild(img);
+        
+        // 将picture元素添加到DOM中以便浏览器开始加载
+        document.body.appendChild(picture);
+        
+        // 加载完成后移除临时元素
+        const handleLoadOrError = () => {
+          document.body.removeChild(picture);
+        };
+        
+        img.addEventListener('load', handleLoadOrError);
+        img.addEventListener('error', handleLoadOrError);
+      } else {
+        // 普通img元素
+        img.src = dataSrc;
+        if (dataSrcSet) {
+          img.srcset = dataSrcSet;
+        }
       }
     }
-  }, [priority, dataSrc, dataSrcSet]);
+  }, [priority, dataSrc, dataSrcSet, pictureSources]);
 
   // 渲染加载进度条
   const renderProgressBar = () => {
@@ -117,9 +157,36 @@ const LazyImage = forwardRef<LazyImageRef, LazyImageProps>((
     return null;
   };
 
-  return (
-    <div className="relative inline-block overflow-hidden">
-      {/* 占位图或加载中的图片 */}
+  // 渲染picture元素
+  const renderPictureElement = () => {
+    if (pictureSources.length > 0) {
+      return (
+        <picture>
+          {pictureSources.map((source, index) => (
+            <source
+              key={index}
+              srcSet={status === 'success' ? source.srcSet : undefined}
+              media={source.media}
+              type={source.type}
+              data-srcset={status !== 'success' ? source.srcSet : undefined}
+            />
+          ))}
+          {/* 占位图或加载中的图片 */}
+          <img
+            ref={imgRef}
+            src={imageUrl}
+            srcSet={status === 'success' ? dataSrcSet : undefined}
+            alt={alt}
+            className={`transition-opacity duration-500 ease-in-out ${className} ${status === 'success' ? 'opacity-100' : 'opacity-0'}`}
+            data-src={dataSrc}
+            data-srcset={status !== 'success' ? dataSrcSet : undefined}
+            {...rest}
+          />
+        </picture>
+      );
+    }
+    // 默认渲染img元素
+    return (
       <img
         ref={imgRef}
         src={imageUrl}
@@ -127,9 +194,15 @@ const LazyImage = forwardRef<LazyImageRef, LazyImageProps>((
         alt={alt}
         className={`transition-opacity duration-500 ease-in-out ${className} ${status === 'success' ? 'opacity-100' : 'opacity-0'}`}
         data-src={dataSrc}
-        data-srcset={dataSrcSet}
+        data-srcset={status !== 'success' ? dataSrcSet : undefined}
         {...rest}
       />
+    );
+  };
+
+  return (
+    <div className="relative inline-block overflow-hidden">
+      {renderPictureElement()}
 
       {/* 加载状态显示 */}
       {status !== 'success' && (
