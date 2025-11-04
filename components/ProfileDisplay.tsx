@@ -1,6 +1,7 @@
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { Profile } from "../types/profile";
 import React from "react";
+import Image from "next/image";
 
 interface ProfileDisplayProps {
   profile: Profile;
@@ -14,10 +15,12 @@ const ProfileDisplay: React.FC<ProfileDisplayProps> = ({ profile, onEdit }) => {
   return (
     <div className="flex flex-col items-center">
       <div className="relative rounded-full overflow-hidden w-16 h-16 mb-2">
-        <img
+        <Image
           src={defaultAvatarUrl}
           alt="Profile Avatar"
           className="object-cover w-full h-full"
+          width={64}
+          height={64}
         />
       </div>
       <h3 className="text-lg font-semibold">{profile.username}</h3>

@@ -7,6 +7,7 @@ import { Profile } from "@/types/profile";
 import ProfileDisplay from "@/components/ProfileDisplay";
 import ProfileEdit from "@/components/ProfileEdit";
 import TypingGame from "@/components/TypingGame";
+import TodoList from "@/components/TodoList";
 import axios from "axios";
 
 const DefaultProfile = {
@@ -73,8 +74,11 @@ const HomePage: React.FC = () => {
           <ProfileDisplay profile={profile} onEdit={handleEdit} />
         )}
       </div>
-      <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full animate-fade">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full animate-fade mb-8">
         <TypingGame profile={profile} onRefresh={onRefresh} />
+      </div>
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full animate-fade">
+        <TodoList />
       </div>
     </div>
   );
